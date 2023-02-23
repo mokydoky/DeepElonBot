@@ -6,8 +6,6 @@ import pandas as pd
 import numpy as np
 from config import authenticate_reddit_user
 
-reddit = authenticate_reddit_user()
-
 
 class subreddit:
     """
@@ -26,20 +24,17 @@ class subreddit:
             A list of functions that process the top 100 posts.
     """
 
-    def __init__(self, name, split_func, list_funcs):
+    def __init__(self, name: str, split_func: function, list_funcs: list):
+        reddit = authenticate_reddit_user()
         self.name = name
         self.top100 = list(reddit.subreddit(name).top())
         self.split_func = split_func
         self.list_funcs = list_funcs
 
-    def create_df(self):
+    def create_df(self) -> pd.DataFrame:
         """
         Creates and processes a dataframe of the top 100 posts from the
         subreddit.
-        ---
-        Parameters: None
-        ---
-        Returns: df
         """
         df = self.split_func(self)
         for func in self.list_funcs:
@@ -48,15 +43,10 @@ class subreddit:
         return df
 
 
-def title_body_split(subreddit_obj):
+def title_body_split(subreddit_obj: subreddit) -> pd.DataFrame:
     """
     Given a subreddit objectm returns a dataframe of the top 100 posts
     from the subreddit divided by title and body.
-    ---
-    Parameters:
-        subreddit_obj: subreddit
-    ---
-    Returns: df
     """
     # Creates a list of titles and bodies from the top 100 posts
     titles = [post.title for post in subreddit_obj.top100]
@@ -67,15 +57,10 @@ def title_body_split(subreddit_obj):
     return df
 
 
-def title_four_words_split(subreddit_obj):
+def title_four_words_split(subreddit_obj: subreddit) -> pd.DataFrame:
     """
     Given a subreddit object, returns a dataframe of the top 100 posts from the
     subreddit with their title divided by the first four words and the rest.
-    ---
-    Parameters:
-        subreddit_obj: subreddit
-    ---
-    Returns: df
     """
     # Creates a list of titles from the top 100 posts of each, dropping posts
     # with less than four words
@@ -93,26 +78,17 @@ def title_four_words_split(subreddit_obj):
     return df
 
 
-def removeWP(text):
+def removeWP(text: str) -> str:
     """
     Takes a piece of text and removes the "[WP]" from the beginning.
-    ---
-    Parameters:
-        text: str
-    ---
-    Returns: str
     """
     return text.removeprefix("[WP]")
 
 
-def remove_edits(text):
+def remove_edits(text: str) -> str:
     """
-    Takes a piece of text and removes anything past an edit
-    ---
-    Parameters:
-        text: str
-    ---
-    Returns: str
+    Takes a piece of text splits it where a form of "Edit:" is found,
+    then takes the first half.
     """
     check_list = ["edit: ", "EDIT: ", "Edit: ", "Edit1: "]
     for check in check_list:
@@ -121,15 +97,10 @@ def remove_edits(text):
     return text
 
 
-def combine_csv(df_lst, csv_name):
+def combine_csv(df_lst: list, csv_name: str) -> None:
     """
     Takes a list of dataframes and combines them into one dataframe and exports
     it to a csv.
-    ---
-    Parameters:
-        df_lst: list of dataframes
-    ---
-    Returns: nothing
     """
     new_df = pd.concat(df_lst)
     new_df.to_csv(csv_name, index=False)

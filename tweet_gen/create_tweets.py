@@ -14,17 +14,10 @@ n_generations = 25
 file_path = "completions.txt"
 
 
-def generate_completions(n, model, prompt, max_tokens):
+def generate_completions(n: int, model: str, prompt: str, max_tokens: int) \
+    -> list:
     """
     Generates completions according to your parameters.
-    ---
-    Parameters:
-        n: int
-        model: str
-        prompt: str
-        max_tokens: int
-    ---
-    Returns: array of completions
     """
     arraycompletions = [
         openai.Completion.create(
@@ -35,15 +28,9 @@ def generate_completions(n, model, prompt, max_tokens):
     return arraycompletions
 
 
-def write_completions(arr, file_path):
+def write_completions(arr: list, file_path: str) -> None:
     """
     Writes the completions to a file.
-    ---
-    Parameters:
-        arr: array of completions
-        file_path: str
-    ---
-    Returns: None
     """
     with open(file_path, "w") as f:
         for i in arr:  # Writes to file

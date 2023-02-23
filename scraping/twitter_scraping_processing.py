@@ -30,7 +30,7 @@ class twitter_user:
             A list of the tweets from the user.
     """
 
-    def __init__(self, id, split_func, list_funcs):
+    def __init__(self, id: str, split_func: function, list_funcs: list):
         # setting max count to 3200 to get the most tweets possible
         max_count = 3200
         # setting max repeats to 16 to get as many tweets as the API allows
@@ -63,14 +63,10 @@ class twitter_user:
             and not tweet.text.str.contains("t.co")
         ]
 
-    def create_df(self):
+    def create_df(self) -> pd.DataFrame:
         """
         Creates and processes a dataframe of the top 100 posts from the
         subreddit.
-        ---
-        Parameters: None
-        ---
-        Returns: df
         """
         df = self.split_func(self)
         for func in self.list_funcs:
@@ -79,7 +75,7 @@ class twitter_user:
         return df
 
 
-def title_four_words_split(twitter_user_obj):
+def title_four_words_split(twitter_user_obj: twitter_user) -> pd.DataFrame:
     first_four = [" ".join(tweet.split()[:4]) for tweet in twitter_user_obj.tweetbodies]
     rest = [" ".join(tweet.split()[4:]) for tweet in twitter_user_obj.tweetbodies]
     # Creates a dataframe of the titles and bodies
@@ -88,15 +84,10 @@ def title_four_words_split(twitter_user_obj):
     return df
 
 
-def combine_csv(df_lst, csv_name):
+def combine_csv(df_lst: list, csv_name: str) -> None:
     """
     Takes a list of dataframes and combines them into one dataframe and exports
     it to a csv.
-    ---
-    Parameters:
-        df_lst: list of dataframes
-    ---
-    Returns: nothing
     """
     new_df = pd.concat(df_lst)
     new_df.to_csv(csv_name, index=False)

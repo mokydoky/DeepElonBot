@@ -2,14 +2,9 @@ import pandas as pd
 import numpy as np
 
 
-def read_files(file_lst):
+def read_files(file_lst: list) -> pd.DataFrame:
     """
     Reads a list of .csvs and puts them into a dataframe.
-    ---
-    Parameters:
-        file_lst: list of strings
-    ---
-    Returns: df
     """
     df_lst = [pd.read_csv(file) for file in file_lst]  # Reads in the csvs
     combination = pd.concat(df_lst)  # Combines the csvs

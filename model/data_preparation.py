@@ -6,18 +6,10 @@ import os
 openai.api_key = get_openai_key()
 
 
-def prepare_data(csv_file, json_file):
+def prepare_data(csv_file:str, json_file:str) -> None:    
     """
     Given a csv file, convert it to jsonl format and uses the OpenAI API to
     prepare the data for fine-tuning.
-    ---
-    Parameters:
-        csv_file: str
-            The path to the csv file.
-        json_file: str
-            The path to the jsonl file.
-    ---
-    Returns: None
     """
     data = pd.read_csv(csv_file)
     data.to_json(json_file, orient="records", lines=True)

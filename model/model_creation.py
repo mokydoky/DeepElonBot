@@ -5,13 +5,9 @@ from config import get_openai_key
 os.environ["OPENAI_API_KEY"] = get_openai_key()
 
 
-def create_model(jsonl_file, model_name):
+def create_model(jsonl_file: str, model_name: str) -> None:
     """
     Creates a model using the OpenAI API.
-    ---
-    Parameters: None
-    ---
-    Returns: None
     """
     # Defines the command to be run
     command = 'openai api fine_tunes.create -t "{jsonl_file}" -m ada \
